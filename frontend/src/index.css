@@ -1,0 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for background and mobile responsiveness */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global background image */
+body {
+  background-image: url('/images/medical-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Login page background */
+.login-bg {
+  background-image: url('/images/login-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* View Profile page background */
+.profile-bg {
+  background-image: url('/images/profile-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Semi-transparent overlay for better content readability */
+.content-overlay {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Darker overlay for better text visibility on backgrounds */
+.dark-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile responsiveness adjustments */
+@media (max-width: 768px) {
+  body, .login-bg, .profile-bg {
+    background-attachment: scroll; /* Better performance on mobile */
+    background-size: cover; /* Ensure full coverage */
+  }
+  
+  /* Adjust overlay for smaller screens */
+  .content-overlay {
+    background-color: rgba(255, 255, 255, 0.9); /* More opaque on mobile */
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  
+  .dark-overlay {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Tablet responsiveness */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .content-overlay {
+    padding: 1.5rem;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1025px) {
+  .content-overlay {
+    padding: 2rem;
+  }
+}
+
+/* Additional utility classes */
+.bg-medical {
+  background-image: url('/images/medical-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.text-overlay {
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Improved button styling for better visibility on backgrounds */
+.btn-primary {
+  background-color: #4f46e5;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(79, 70, 229, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: #4338ca;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(79, 70, 229, 0.4);
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Form styling for better visibility on backgrounds */
+.form-input {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.form-input:focus {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* White text for dark overlays */
+.text-white {
+  color: white;
+}
+
+/* Services page background */
+.services-bg {
+  background-image: url('/images/services-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
