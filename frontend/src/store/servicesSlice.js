@@ -1,20 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-// Create axios instance
-const api = axios.create({
-  baseURL: 'http://localhost:5000',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+import api from '../services/api';
 
 // Async thunks
 export const getServices = createAsyncThunk(
   'services/getServices',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get('/api/services');
+      const response = await api.get('/services');
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch services');
@@ -26,7 +18,7 @@ export const getServiceById = createAsyncThunk(
   'services/getServiceById',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/api/services/${id}`);
+      const response = await api.get(`/services/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch service');
@@ -63,7 +55,8 @@ const servicesSlice = createSlice({
       .addCase(getServices.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.services = action.payload.data;
+        // Handle both direct array and wrapped response
+        state.services = Array.isArray(action.payload) ? action.payload : action.payload.data || [];
       })
       .addCase(getServices.rejected, (state, action) => {
         state.isLoading = false;
@@ -77,7 +70,7 @@ const servicesSlice = createSlice({
       .addCase(getServiceById.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.currentService = action.payload.data;
+        state.currentService = action.payload.data || action.payload;
       })
       .addCase(getServiceById.rejected, (state, action) => {
         state.isLoading = false;
