@@ -7,13 +7,23 @@ connectDB();
 const app = express();
 // Middleware
 app.use(express.json());
-// Updated CORS configuration
+// Updated CORS configuration to handle Vercel preview URLs
 app.use(cors({
-  origin: [
-    'http://localhost:5000', //  local dev server (adjust port if needed)
-    'https://doctor-appointment-5l93bunjr-vishnus-projects-1257edd0.vercel.app' // Vercel frontend
-  ],
-  credentials: true
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Allow localhost and any vercel.app domain
+    if (origin.startsWith('http://localhost:') || origin.endsWith('.vercel.app')) {
+      return callback(null, true);
+    }
+    
+    const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+    return callback(new Error(msg), false);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 // Request logging middleware
 app.use((req, res, next) => {
@@ -28,13 +38,13 @@ const authRoutes = require('./routes/authRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
 const userRoutes = require('./routes/userRoutes');
 const doctorRoutes = require('./routes/doctorRoutes');
-const serviceRoutes = require('./routes/serviceRoutes'); // Add this
+const serviceRoutes = require('./routes/serviceRoutes'); 
 // Mount routers
 app.use('/api/auth', authRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/doctors', doctorRoutes);
-app.use('/api/services', serviceRoutes); // Add this
+app.use('/api/services', serviceRoutes); 
 // Test routes
 app.get('/', (req, res) => {
   res.send('API is running...');
