@@ -1,44 +1,28 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-// Create a reusable axios instance with full backend URL
-const api = axios.create({
-  baseURL: 'http://localhost:5000',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Add request interceptor to dynamically add token
-api.interceptors.request.use(
-  (config) => {
-    // Get token from localStorage for each request
-    const token = localStorage.getItem('token');
-    
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+import api from '../services/api';
 
 // Get user profile
 export const getUserProfile = createAsyncThunk(
   'userProfile/getUserProfile',
-  async (_, thunkAPI) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get('/api/users/profile');
+      const response = await api.get('/users/me');
       return response.data;
     } catch (error) {
-      const message = 
-        (error.response && error.response.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch user profile');
+    }
+  }
+);
+
+// Update user profile
+export const updateUserProfile = createAsyncThunk(
+  'userProfile/updateUserProfile',
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await api.put('/users/profile', userData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to update user profile');
     }
   }
 );
@@ -64,19 +48,33 @@ const userProfileSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Get user profile
       .addCase(getUserProfile.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getUserProfile.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload;
+        state.user = action.payload.data || action.payload;
       })
       .addCase(getUserProfile.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        state.user = null;
+      })
+      // Update user profile
+      .addCase(updateUserProfile.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload.data || action.payload;
+      })
+      .addCase(updateUserProfile.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   }
 });
