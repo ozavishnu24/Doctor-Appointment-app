@@ -7,7 +7,14 @@ connectDB();
 const app = express();
 // Middleware
 app.use(express.json());
-app.use(cors());
+// Updated CORS configuration
+app.use(cors({
+  origin: [
+    'http://localhost:5000', //  local dev server (adjust port if needed)
+    'https://doctor-appointment-5l93bunjr-vishnus-projects-1257edd0.vercel.app' // Vercel frontend
+  ],
+  credentials: true
+}));
 // Request logging middleware
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path} - ${new Date().toISOString()}`);
@@ -86,5 +93,4 @@ app.use((err, req, res, next) => {
     error: err.message || 'Server Error'
   });
 });
-
 module.exports = app;
