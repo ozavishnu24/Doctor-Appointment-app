@@ -129,7 +129,7 @@ const appointmentSlice = createSlice({
         state.appointments = [];
       });
   }
-);
+});
 
 export const { reset } = appointmentSlice.actions;
 export default appointmentSlice.reducer;
